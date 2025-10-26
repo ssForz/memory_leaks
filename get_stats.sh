@@ -58,8 +58,29 @@ get_critical_events() {
 	echo "" >> $REPORT
 }
 
+get_kernel_stat() {
+	echo "=== KERNEL EVENTS ===" >> $REPORT
+	echo "---OOM killer events:" >> $REPORT
+	dmesg -T | grep -i "oom\|our of memory" | tail -20 >> $REPORT || echo "None" >> $REPORT
+	echo "" >> $REPORT
+	
+	echo "---Kernel panic and critical errors" >> $REPORT
+	dmesg -T | grep -i "panic\|bug\|error\|warning" | grep -v "DEBUG\|INFO" | tail -15 >> $REPORT || echo "None" >> $REPORT
+	echo "" >> $REPORT
+	
+	echo "---Recent kernel messages (dmesg):" >> $REPORT
+	dmesg -T | tail -30 >> $REPORT || echo "None" >> $REPORT
+	echo "" >> $REPORT
+	
+	echo "---Killed processes (potential OOM victims):" >> $REPORT
+	ps -eo pid,ppid,comm,state,lstart,time --no-headers | grep -E "^[ ]*[0-9]+[ ]+[0-9]+[ ]+.*[ ]+Z[ ]+" >> $REPORT || echo "None" >> $REPORT
+	echo "" >> $REPORT
+}
+
+
 get_memory_stat
 get_cpu_stat
 get_swap_stat
 get_critical_events
+get_kernel_stat
 
