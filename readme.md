@@ -1,8 +1,8 @@
 ## memory leaks
 leaks.py - memory leaks simulation
 
-monitoring.sh - main script
-get_stats.sh - get statistics script
+monitoring.sh - main script   
+get_stats.sh - get statistics script   
 
 Run:
 ```
